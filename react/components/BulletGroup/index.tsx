@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react'
-import { useListContext } from 'vtex.list-context'
+import { useListContext,ListContextProvider  } from 'vtex.list-context'
 import { BulletsSchema } from './BulletTypes'
 import { useDevice } from 'vtex.device-detector'
 import { getBulletsAsTSXList } from './modules/bulletsAsList'
@@ -16,17 +16,22 @@ const BulletGroup = ({
 
     console.log("Bullets", bullets)
 
-    const bulletsContent = getBulletsAsTSXList(bullets);
+    const bulletsGroup = getBulletsAsTSXList(bullets);
+    const newListContextValue = list.concat(bulletsGroup)
 
     if (false) {
         console.log(children, list)
     }
     return (
-        isMobile
+        <ListContextProvider list={newListContextValue}>
+            {
+            isMobile
             ?
-            <div>Estamos en mobile</div>
+            <div>{bulletsGroup}</div>
             :
-            <div>{bulletsContent}</div>
+            children
+            }
+        </ListContextProvider>
     )
 }
 export default BulletGroup
